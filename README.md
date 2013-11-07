@@ -49,7 +49,7 @@ $ git push
     If minimized code works fine, it's time to publish it!
 
     ```shell
-    $ grunt release
+    $ grunt gh-pages
     ```
 
     You can use `grunt-gh-pages`'s params like `--gh-pages-tag 'v1.2.3' --gh-pages-message 'Tagging v1.2.3'`

@@ -24,6 +24,16 @@ module.exports = function (grunt) {
                 }
             }
         },
+        cssmin: {
+            compress: {
+                options: {
+                    report: 'gzip'
+                },
+                files: {
+                    'build/index.css': ['index.css']
+                }
+            }
+        },
         'gh-pages': {
             options: {
                 base: 'build'
@@ -37,16 +47,17 @@ module.exports = function (grunt) {
     });
 
     grunt.loadNpmTasks('grunt-contrib-copy');
+    grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-requirejs');
     grunt.loadNpmTasks('grunt-gh-pages');
 
     grunt.registerTask('default', function() {
-        grunt.log.writeln('Run `grunt build` to build production code');
+        grunt.log.writeln('Please look README');
     });
     grunt.registerTask('build', function() {
-        grunt.task.run('copy', 'requirejs');
+        grunt.file.delete('build');
+        grunt.task.run('copy', 'cssmin', 'requirejs');
         grunt.log.writeln('Now you can check build files: open `build/index.html` in browser');
     });
-    grunt.registerTask('release', ['gh-pages']);
 
 };
