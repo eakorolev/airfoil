@@ -1,0 +1,11 @@
+{
+  "name": "airfoil",
+  "version": "0.0.0",
+  "devDependencies": {
+    "grunt": "~0.4.1",
+    "grunt-shell": "~0.2.2",
+    "grunt-contrib-copy": "~0.4.1",
+    "grunt-requirejs": "~0.4.0",
+    "grunt-gh-pages": "~0.8.1"
+  }
+}
