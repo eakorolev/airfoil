@@ -62,7 +62,8 @@ module.exports = function (grunt) {
             src: [
                 'index.html',
                 'index.js',
-                'index.css'
+                'index.css',
+		'mathjax/**'
             ]
         }
     });
