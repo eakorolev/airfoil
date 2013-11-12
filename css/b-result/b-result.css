@@ -1,0 +1,11 @@
+.b-result
+{
+    margin: 0;
+    padding: 0;
+}
+
+.b-result text
+{
+    font-family: courier, monospace;
+    font-size: 40px;
+}

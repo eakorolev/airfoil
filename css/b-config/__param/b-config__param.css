@@ -1,0 +1,9 @@
+.b-config__param_type_extra
+{
+    display: none;
+}
+
+.b-config_extra-params_visible .b-config__param_type_extra
+{
+    display: block;
+}

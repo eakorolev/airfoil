@@ -1,1 +1,9 @@
-@import url("css/b-page.css");
+@import "css/b-page/b-page.css";
+@import "css/b-page/__pane/b-page__pane.css";
+@import "css/text.css";
+@import "css/island.css";
+@import "css/b-config/b-config.css";
+@import "css/b-config/__param/b-config__param.css";
+@import "css/b-config/__launch/b-config__launch.css";
+@import "css/b-result/b-result.css";
+@import "css/main-axes/main-axes.css";

@@ -1,0 +1,22 @@
+.b-page__pane
+{
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    padding: 10px;
+    margin: 0;
+    overflow: hidden;
+}
+
+.b-page__pane_position_left
+{
+    width: 250px;
+}
+
+.b-page__pane_position_right
+{
+    left: 260px;
+}
