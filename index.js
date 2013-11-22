@@ -10,11 +10,12 @@ require.config({
     }
 });
 
-require(['jquery', 'calc', 'draw', 'vow'], function ($, Calc, Draw) {
+require(['jquery', 'calc', 'draw', 'vow', 'zoom', 'inform'], function ($, Calc, Draw) {
     var canvas, paper, config, $config,
-        params = {};
+        params = {},
+        $doc = $(document);
 
-    $(document).ready(function () {
+    $doc.ready(function () {
         canvas = new Draw($('#b-result'));
         paper = canvas.paper;
         config = document.config;
@@ -30,6 +31,21 @@ require(['jquery', 'calc', 'draw', 'vow'], function ($, Calc, Draw) {
 
         $config.find('.b-config__launch').click(launchCalc);
 
+        var informer = $('.b-scroll-area__informer'),
+            informerFn = require('inform');
+        $doc.on('mouseenter click', '.b-point', function () {
+            var $this = $(this),
+                dataStr = $this.data('point'),
+                data = {};
+            if (dataStr.substr(0, 8) === 'return {') {
+                data = Function(dataStr)();
+            }
+
+            informerFn(data, informer);
+        });
+
+        require('zoom').init();
+
         onConfigChange();
     });
 
@@ -40,8 +56,10 @@ require(['jquery', 'calc', 'draw', 'vow'], function ($, Calc, Draw) {
         var c = +($(config.c).val()),
             M = +($(config.M).val()),
             alpha = +($(config.alpha).val()),
+            k = +($(config.k).val()),
             x0 = +($(config.x0).val()),
-            N = +($(config.N).val());
+            Nt = +($(config.Nt).val()),
+            Nb = +($(config.Nb).val());
 
         if (c < 0.01) c = 0.01;
         if (c > 0.5) c = 0.5;
@@ -51,29 +69,42 @@ require(['jquery', 'calc', 'draw', 'vow'], function ($, Calc, Draw) {
         if (alpha > 20) alpha = 20;
         if (x0 < 0.001) x0 = 0.001;
         if (x0 > 0.5) x0 = 0.5;
-        if (N < 2) N = 2;
-        if (N > 50) N = 50;
+        if (Nt < 8) Nt = 8;
+        if (Nt > 50) Nt = 50;
+        if (Nb < 8) Nb = 8;
+        if (Nb > 50) Nb = 50;
 
         if ((params.c != c) ||
             (params.M != M) ||
             (params.alpha != alpha) ||
+            (params.k != k) ||
             (params.x0 != x0) ||
-            (params.N != N)) {
+            (params.Nt != Nt) ||
+            (params.Nb != Nb)) {
 
             params = {
                 c: c,
                 M: M,
                 alpha: alpha,
+                k: k,
                 x0: x0,
-                N: N
+                Nt: Nt,
+                Nb: Nb
             };
 
-            canvas.drawProblem(params);
+            canvas.drawProblem({
+                c: c,
+                M: M,
+                alpha: alpha * Math.PI / 180,
+                k: k,
+                x0: x0,
+                Nt: Nt,
+                Nb: Nb
+            });
         }
     }
 
     function launchCalc() {
-        var Vow = require('vow');
         canvas.clearProblem();
         canvas.clearResult();
 
@@ -81,20 +112,28 @@ require(['jquery', 'calc', 'draw', 'vow'], function ($, Calc, Draw) {
         $(config.c).val(params.c);
         $(config.M).val(params.M);
         $(config.alpha).val(params.alpha);
+        $(config.k).val(params.k);
         $(config.x0).val(params.x0);
-        $(config.N).val(params.N);
+        $(config.Nt).val(params.Nt);
+        $(config.Nb).val(params.Nb);
 
-        var calc = new Calc(params),
+        var calc = new Calc({
+                c: params.c,
+                M: params.M,
+                alpha: params.alpha * Math.PI / 180,
+                k: params.k,
+                x0: params.x0,
+                Nt: params.Nt,
+                Nb: params.Nb
+            }),
             pointAccumulator = [],
             accumulatorFlag = true,
-            accumulatorInterval = setInterval(function(){
-                if(!accumulatorFlag) return;
+            accumulatorInterval = setInterval(function () {
+                if (!accumulatorFlag) return;
                 accumulatorFlag = false;
 
-                while(pointAccumulator.length) {
-                    canvas.drawResultPoint(pointAccumulator.pop());
-
-                    console.log('another point');
+                while (pointAccumulator.length) {
+                    canvas.drawPoint(pointAccumulator.pop(), canvas.resultDrawArea);
                 }
 
                 accumulatorFlag = true;
@@ -102,18 +141,19 @@ require(['jquery', 'calc', 'draw', 'vow'], function ($, Calc, Draw) {
 
         canvas.drawResult(calc);
 
-        var promise = calc.start();
+        var promise = calc.start(canvas);
 
-        promise.progress(function(point){
+        promise.progress(function (point) {
             pointAccumulator.push(point);
         });
 
-        promise.then(function(){
+        promise.always(function (p) {
             clearInterval(accumulatorInterval);
             canvas.clearResult();
             canvas.drawResult(calc);
+            require('inform')(calc, $('#coef_result'));
             $config.find('input').removeProp('disabled');
-            MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+            if (p.isRejected()) throw p.valueOf();
         });
     }
 });

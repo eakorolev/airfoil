@@ -1,0 +1,16 @@
+.b-point
+{
+
+}
+
+.b-point__vector
+{
+    display: none;
+}
+
+.b-point:hover .b-point__vector
+{
+    stroke: red;
+    fill: red;
+    display: block;
+}

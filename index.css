@@ -7,3 +7,8 @@
 @import "css/b-config/__launch/b-config__launch.css";
 @import "css/b-result/b-result.css";
 @import "css/main-axes/main-axes.css";
+@import "css/b-scroll-area/b-scroll-area.css";
+@import "css/b-scroll-area/__controls/b-scroll-area__controls.css";
+@import "css/b-scroll-area/__zoom-control/b-scroll-area__zoom-control.css";
+@import "css/b-scroll-area/__informer/b-scroll-area__informer.css";
+@import "css/b-point/b-point.css";

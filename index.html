@@ -11,18 +11,21 @@
             <p class="b-config__param">
                 Уравнение профиля<br/>\[ \bar{y}=\pm 2\cdot c\cdot\bar{x}\cdot(1-\bar{x}) \]
             </p>
+
             <p class="b-config__param">
                 <label>
                     Величина утолщения<br/>
                     \( c = \)<input name="c" type="text" value="0.12">
                 </label>
             </p>
+
             <p class="b-config__param">
                 <label>
                     Угол атаки<br/>
                     \( \alpha = \)<input name="alpha" type="text" value="5">\( ^{ \circ} \)
                 </label>
             </p>
+
             <p class="b-config__param">
                 <label>
                     Скорость потока<br/>
@@ -30,58 +33,88 @@
                 </label>
             </p>
             <a href="#" class="b-config__extraparams">Дополнительные параметры</a>
+
+            <p class="b-config__param b-config__param_type_extra">
+                <label>
+                    Показатель адиабаты воздуха<br/>
+                    \( k = \)<input name="k" type="text" value="1.4">
+                </label>
+            </p>
+
             <p class="b-config__param b-config__param_type_extra">
                 <label>
                     Начальная точка расчета<br/>
-                    \( \bar{x}_0 = \)<input name="x0" type="text" value="0.02">
+                    \( \bar{x}_0 = \)<input name="x0" type="text" value="0.1">
                 </label>
             </p>
+
             <p class="b-config__param b-config__param_type_extra">
                 <label>
-                    Количество слоев<br/>
-                    \( N = \)<input name="N" type="text" value="15">
+                    Количество слоев сверху<br/>
+                    \( N_в = \)<input name="Nt" type="text" value="20">
                 </label>
             </p>
+
+            <p class="b-config__param b-config__param_type_extra">
+                <label>
+                    Количество слоев внизу<br/>
+                    \( N_н = \)<input name="Nb" type="text" value="12">
+                </label>
+            </p>
+
             <p class="b-config__param">
                 <input class="b-config__launch" type="button" value="Расчет"/>
             </p>
         </form>
-        <div class="island" id="abc">
+        <div class="island" id="coef_result">
         </div>
     </div>
     <div class="b-page__pane b-page__pane_position_right">
-        <svg id="b-result" class="b-result island"
-             version="1.1"
-             baseProfile="full"
-             xmlns="http://www.w3.org/2000/svg"
-             xmlns:xlink="http://www.w3.org/1999/xlink"
-             xmlns:ev="http://www.w3.org/2001/xml-events"
-             viewbox="-300 -550 1400 1100"
-             preserveAspectRatio="xMidYMid meet">
-            <pattern id="hatch0_45" width="20" height="20" patternUnits="userSpaceOnUse">
-                <line stroke="black" stroke-width="1" x1="1" y1="20" x2="20" y2="1"/>
-                <line stroke="black" stroke-width="1" x1="0" y1="1" x2="1" y2="0"/>
-            </pattern>
-            <g class="main-axes">
-                <g fill="none" stroke="black">
-                    <path class="main_axes__axis main_axes__axis_type_x"
-                          d="M-200,0L1100,0L1050,-10M1050,10L1100,0"></path>
-                    <path class="main_axes__axis main_axes__axis_type_x"
-                          d="M100 5L100 -5M200 5L200 -5M300 5L300 -5M400 5L400 -5M500 5L500 -5M600 5L600 -5M700 5L700 -5M800 5L800 -5M900 5L900 -5M1000 5L1000 -5"></path>
-                    <path class="main_axes__axis main_axes__axis_type_y"
-                          d="M0 500L0 -500L-10 -450M10 -450L0 -500"></path>
-                    <path class="main_axes__axis main_axes__axis_type_y"
-                          d="M-5 -400L5 -400M-5 -300L5 -300M-5 -200L5 -200M-5 -100L5 -100M-5 100L5 100M-5 200L5 200M-5 300L5 300M-5 400L5 400"></path>
+        <div class="b-scroll-area b-page__scroll-area island">
+            <svg id="b-result" class="b-result"
+                 version="1.1"
+                 baseProfile="full"
+                 xmlns="http://www.w3.org/2000/svg"
+                 xmlns:xlink="http://www.w3.org/1999/xlink"
+                 xmlns:ev="http://www.w3.org/2001/xml-events"
+                 viewbox="-300 -400 1400 800"
+                 preserveAspectRatio="xMidYMid meet">
+                <pattern id="hatch0_45" width="20" height="20" patternUnits="userSpaceOnUse">
+                    <line stroke="black" stroke-width="1" x1="1" y1="20" x2="20" y2="1"/>
+                    <line stroke="black" stroke-width="1" x1="0" y1="1" x2="1" y2="0"/>
+                </pattern>
+                <g class="b-result__axes main-axes">
+                    <g fill="none" stroke="black">
+                        <path class="main_axes__axis main_axes__axis_type_x"
+                              d="M-200,0L1100,0L1050,-10M1050,10L1100,0"></path>
+                        <path class="main_axes__axis main_axes__axis_type_x"
+                              d="M100 5L100 -5M200 5L200 -5M300 5L300 -5M400 5L400 -5M500 5L500 -5M600 5L600 -5M700 5L700 -5M800 5L800 -5M900 5L900 -5M1000 5L1000 -5"></path>
+                        <path class="main_axes__axis main_axes__axis_type_y"
+                              d="M0 300L0 -300L-10 -250M10 -250L0 -300"></path>
+                        <path class="main_axes__axis main_axes__axis_type_y"
+                              d="M-5 -200L5 -200M-5 -100L5 -100M-5 100L5 100M-5 200L5 200"></path>
+                    </g>
+                    <g fill="black" stroke="none">
+                        <text class="main_axes__text main_axes__text_type_x main_axes__text_type_x" x="-40" y="40">0
+                        </text>
+                        <text class="main_axes__text main_axes__text_type_x" x="1000" y="40">1</text>
+                        <text class="main_axes__text main_axes__text_type_x" x="1065" y="-30"
+                              text-decoration="overline">x
+                        </text>
+                        <text class="main_axes__text main_axes__text_type_y" x="-40" y="-270"
+                              text-decoration="overline">y
+                        </text>
+                        <text class="main_axes__text main_axes__text_type_y" x="-65" y="-190">.2</text>
+                    </g>
                 </g>
-                <g fill="black" stroke="none">
-                    <text class="main_axes__text main_axes__text_type_x main_axes__text_type_x" x="-40" y="40">0</text>
-                    <text class="main_axes__text main_axes__text_type_x" x="1000" y="40">1</text>
-                    <text class="main_axes__text main_axes__text_type_x" x="1065" y="-30" text-decoration="overline">x</text>
-                    <text class="main_axes__text main_axes__text_type_y" x="-40" y="-470" text-decoration="overline">y</text>
-                    <text class="main_axes__text main_axes__text_type_y" x="-65" y="-390">.4</text>
-                </g>
-            </g>
-        </svg>
+            </svg>
+        </div>
+        <div class="b-scroll-area__controls" data-zoom-selector="#b-result" data-zoom-max="1000" data-zoom-min="80">
+            <button class="b-scroll-area__zoom-control" data-zoom-delta="+10">+</button>
+            <button class="b-scroll-area__zoom-control" data-zoom-delta="-10">-</button>
+            <button class="b-scroll-area__zoom-control" data-zoom-value="100">100%</button>
+        </div>
+        <div class="b-scroll-area__informer island"/>
     </div>
 </div>
 <script data-main="index" src="vendor/require.js"></script>
