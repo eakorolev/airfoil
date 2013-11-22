@@ -42,7 +42,7 @@ $ git push
     $ grunt build
     ```
 
-    Now you can check built file: open `build/index.html` in web-browser
+    Now you can check built file: open `.grunt/build/index.html` in web-browser
 
   3. Publish files to `github.io`
 
